@@ -22,18 +22,20 @@ length = 16
 # run rtls_aoa_iq_with_rtls_util_export_into_csv_log.py
 # and write your path of the output folder of rtls_aoa_iq_with_rtls_util_export_into_csv_log.py here
 filepath = r"D:\prog10\Desktop\桌面\210120\aoadata\rtls_agent\examples\rtls_aoa_iq_with_rtls_util_export_into_csv_log"
+filepath = r"D:\prog10\Desktop\桌面\210120\rtls_agent\rtls_agent\examples\rtls_aoa_iq_with_rtls_util_export_into_csv_log"
 
 # put the address of the device we want to analyze (e.g. the address of PASSIVE)
 # this address is used to filter data in the csv file
 # when calculating AOA from PASSIVE, write the PASSIVE's address
 # when calculating AOA from MASTER, write the MASTER's address
-address = "80:6F:B0:31:FB:AF"
+address = "80:6F:B0:EE:AC:E1"
 
 if __name__ == '__main__':
 
     # open the newest csv file in the directory
-    filename = [i for i in os.listdir(filepath) if '.csv' in i][-1]
 
+    filename = [i for i in os.listdir(filepath) if '.csv' in i][-2]
+    #filename = r"D:\prog10\Desktop\桌面\210120\rtls_agent\rtls_agent\examples\rtls_aoa_iq_with_rtls_util_export_into_csv_log\03_16_2021_10_34_58_rtls_raw_iq_samples.csv"
     # print the filename of the opened file. Please check the filename.
     print(f'open csv file {filename}')
 
@@ -49,7 +51,7 @@ if __name__ == '__main__':
             # skip the header of the csv file
             for line in f.readlines()[1:]:
                 identifier, pkt, sample_idx, rssi, ant_array, channel, i, q = line.split(',')
-                if identifier == address:
+                if identifier != address:
                     xs.append(int(i))
                     ys.append(int(q))
 
@@ -68,8 +70,9 @@ if __name__ == '__main__':
             # read from the 20st package
             # if read the 1th package, change the starting point of this range().
             print(int(len(phases_all) / package_size))
-            for pacID in range(2, int(len(phases_all) / package_size)):
+            for pacID in range(0, int(len(phases_all) / package_size)):
 
+                print('-------------------reading the',pacID,'th packet---------------------------')
                 # cut into packets
                 phases_packet = phases_all[pacID * package_size: (pacID + 1) * package_size]
 
@@ -80,7 +83,7 @@ if __name__ == '__main__':
                 phases_packet = phases_packet[32:]
 
                 # plot
-                plt.plot(phases_packet, 'b', linewidth=0.5, markersize=3)
+                plt.plot(phases_packet, 'b.', linewidth=0.5, markersize=3)
                 plt.title('the original phases')
                 plt.show()
 
@@ -93,6 +96,9 @@ if __name__ == '__main__':
                 diff -= phases_packet[0] - lstResult - 20
 
                 # if sample drops over 180: compensate 360 to the rest of the samples
+                # a switch of antennas only introduces no more than 90degrees
+                # and phase between samples are about 20 degrees
+                # there should not be more than 180 degrees difference between samples
                 for j in range(len(phases_packet) - 1):
                     phases_plus.append(phases_packet[j] + diff)
                     temp = phases_packet[1 + j] - phases_packet[j] - 20
@@ -113,14 +119,32 @@ if __name__ == '__main__':
                 #phases_diff = [i if i > -100 else i + 360 for i in phases_diff]
 
                 plt.plot(phases_diff, 'b.', linewidth=0.5, markersize=3)
-                plt.title('phases_plus diff phase[i+1] - phase[i]')
+                plt.title('phases_plus diff1 phase[i+1] - phase[i]')
+                plt.show()
+                plt.plot([phases_diff[i] for i in range(len(phases_diff)) if int((i % (length * 3)) / length) == 0], 'b.', linewidth=0.5, markersize=3,label = "antenna0")
+                plt.legend()
+                plt.show()
+                plt.plot([phases_diff[i] for i in range(len(phases_diff)) if int((i % (length * 3)) / length) == 1], 'g.', linewidth=0.5, markersize=3,label = "antenna1")
+                plt.legend()
+                plt.show()
+                plt.plot([phases_diff[i] for i in range(len(phases_diff)) if int((i % (length * 3)) / length) == 2], 'r.', linewidth=0.5, markersize=3,label = "antenna2")
+                plt.title('phases_plus diff1 phase[i+length] - phase[i]')
+                plt.legend()
                 plt.show()
 
                 phases_diff_len = [phases_plus[j + length] - phases_plus[j] for j in
                                    range(0, len(phases_plus) - length)]
+                phases_diff_lens = [[phases_diff_len[i] for i in range(len(phases_diff_len)) if int((i % (length * 3)) / length) == ant]
+                                    for ant in range(3)]
 
+                plt.plot(phases_diff_lens[0], 'b.', linewidth=0.5, markersize=3,label = "antenna0to1")
+                plt.plot(phases_diff_lens[1], 'g.', linewidth=0.5, markersize=3,label = "antenna1to2")
+                plt.plot(phases_diff_lens[2], 'r.', linewidth=0.5, markersize=3,label = "antenna2to0")
+                plt.title('phases_plus diff16 phase[i+length] - phase[i]')
+                plt.legend()
+                plt.show()
                 plt.plot(phases_diff_len, 'b.', linewidth=0.5, markersize=3)
-                plt.title('phases_plus diff across length phase[i+length] - phase[i]')
+                plt.title('phases_plus diff16 (all antennas) phase[i+length] - phase[i]')
                 plt.show()
 
                 # calculate the averages of each antenna for levelling
@@ -155,50 +179,73 @@ if __name__ == '__main__':
                     ant_result_diffs[ant] = np.average(
                         [k for k in ant_phase_diffs[ant] if abs(k - highest_bin) < average_range])
                     print("ant_result_diff: ", ant_result_diffs[ant])
-                avg_ard = np.average(ant_result_diffs)
-                print("avgard",avg_ard*length)
+                avg_diff1 = np.average(ant_result_diffs)
+                print("avgard", avg_diff1 * length)
                 # plt.show()
 
+                #modify phases
+                s = 0
+                phases_plus_modified = []
+                for i in range(len(phases_plus)):
+                    phases_plus_modified.append(phases_plus[i] - s)
+                    s += ant_result_diffs[int((i % (length * 3)) / length)]
+                plt.plot(phases_plus_modified, 'r.', linewidth=0.5, markersize=3)
+                plt.title('phases - avg_phase_increase_of_this_antenna(around 20)')
+                plt.show()
+
+                #validation
+                phases_plus_modified_in_each_ant = [[0],[0],[0]]
+                for i in range(int(len(phases_plus_modified) / length)):
+                    ant = i % 3
+                    temp = phases_plus_modified[i * length + 4] - phases_plus_modified_in_each_ant[ant][-1]
+                    for j in range(4,12):
+                        idx = i * length + j
+                        phases_plus_modified_in_each_ant[ant].append(phases_plus_modified[idx] - temp)
+
+                plt.plot(phases_plus_modified_in_each_ant[0], 'r.', linewidth=0.5, markersize=3,label='phases_plus_modified_in_each_ant[0]')
+                plt.plot(phases_plus_modified_in_each_ant[1], 'g.', linewidth=0.5, markersize=3,label='phases_plus_modified_in_each_ant[1]')
+                plt.plot(phases_plus_modified_in_each_ant[2], 'b.', linewidth=0.5, markersize=3,label='phases_plus_modified_in_each_ant[2]')
+                plt.title('validation: the mid 8 points of each antenna should be flattened')
+                plt.legend()
+                plt.show()
+
+
                 # phases_diff_modified = phases_diff minus the popular phase diffs of each antenna
-                phases_diff = [phases_plus[j + length] - phases_plus[j] for j in
-                                   range(0, len(phases_plus) - length)]
-                phase_diff_modified = [phases_diff[i] - ant_result_diffs[int((i % (length * 3)) / length)]
-                                       for i in range(len(phases_diff))]
+                phase_diff_modified = [phases_plus_modified[j + length] - phases_plus_modified[j] for j in
+                                   range(0, len(phases_plus_modified) - length)]
                 phase_diff_modified_per_ant = [[phase_diff_modified[i] for i in range(len(phase_diff_modified)) if int((i % (length * 3)) / length) == ant] for ant in range(3)]
-                print(phase_diff_modified_per_ant[0])
+                # print(phase_diff_modified_per_ant[0])
+                ant_result_diffs16 = [0,0,0]
                 for ant in range(3):
                     # plot the histogram of phase_diff of antenna in each packet
                     # plt.hist(phase_diff_modified_per_ant[ant], bins=40, density=True)
-
+                    plt.hist(phase_diff_modified_per_ant[ant], bins=40)
                     # calculate the histogram
                     (histogram, binplace) = np.histogram(phase_diff_modified_per_ant[ant], bins=40)
 
                     # find the position of the highest bin
                     highest_bin = binplace[int(np.argmax(np.array(histogram)))]
-                    print(highest_bin)
 
                     # make an average around this bin
                     # Parameter: how wide we want this average
-                    average_range = (np.max(phase_diff_modified_per_ant[ant]) - np.min(phase_diff_modified_per_ant[ant])) / 4
+                    average_range = (np.max(phase_diff_modified_per_ant[ant]) - np.min(phase_diff_modified_per_ant[ant])) / 8
 
+                    print('highest bin',highest_bin,'now calc avg ranging from ',highest_bin - average_range, 'to', highest_bin + average_range)
                     # calculate the average
-                    ant_result_diffs[ant] = np.average(
+                    ant_result_diffs16[ant] = np.average(
                         [k for k in phase_diff_modified_per_ant[ant] if abs(k - highest_bin) < average_range])
-                    print("ant_result_diff: ", ant_result_diffs[ant])
-                diffs = [0,0,0]
-                diffs[0] = ant_result_diffs[0] - length * avg_ard
-                diffs[1] = ant_result_diffs[1] - length * avg_ard
-                diffs[2] = -(ant_result_diffs[2] - length * avg_ard)/2
-                print("ant diffs",diffs)
-                diffs2 = [math.asin(max(-90,min(k/90)))/math.pi*180 for k in diffs]
-                for ant in range(3):
-                    print('ans',ant, diffs2[ant])
-                print('avg',np.average(diffs2))
+                    print("ant_result_diff16: ", ant_result_diffs16[ant])
+                    plt.show()
 
-                diff3 = ((ant_result_diffs[0]+ant_result_diffs[1])/2-ant_result_diffs[2])/3
-
-                print('anotherans', math.asin(diff3 / 90) / math.pi * 180)
-                print('-------------------------------------------')
+                def phasetoangle(phase):
+                    angle = float(phase/90)
+                    angle = min(angle,1)
+                    angle = max(angle,-1)
+                    return math.asin(angle)/math.pi*180
+                angles = [phasetoangle(k) for k in ant_result_diffs16]
+                print("ant diffs[calculated by diff16-(avg_diff1)*16]", angles, 'avg', np.average(angles))
+                diff3 = ((ant_result_diffs16[0]+ant_result_diffs16[1])/2-ant_result_diffs16[2])/3
+                print('ant diffs[calculated by (updiff-downdiff)/3]:',phasetoangle(diff3))
                 # plt.show()
 
                 # plot phase_diff_modified
@@ -225,9 +272,11 @@ if __name__ == '__main__':
                              'r.', linewidth=0.5, markersize=3)  # , label='phase calculated from I/Q output')
                     plt.plot(np.array(range(i, i + length)), phases_plus[i:i + length], 'b.', linewidth=0.5,
                              markersize=3)
+                plt.title("phases and lines - antenna feature modified")
+                plt.show()
 
                 # draw lines for phases_plus with antenna diff removed
-                phases_plus_modified = [sum(phase_diff_modified[:i + 1]) for i in range(len(phase_diff_modified) - 1)]
+                # phase_diff_modified_sum = [sum(phase_diff_modified[:i + 1]) for i in range(len(phase_diff_modified) - 1)]
                 for i in range(length, int(len(phases_plus_modified)) - length, length):
                     # parameter: only use the mid length/2 points for linear regression
                     lenside = int(length / 4)
@@ -239,7 +288,7 @@ if __name__ == '__main__':
                              'r.', linewidth=0.5, markersize=3)  # , label='phase calculated from I/Q output')
                     plt.plot(np.array(range(i, i + length)), phases_plus_modified[i:i + length], 'b.', linewidth=0.5,
                              markersize=3)
-                plt.title("phases and lines - antenna feature modified and unmodified")
+                plt.title("phases and lines - antenna feature modified")
                 plt.show()
 
                 phases_modified_diff_len = [phases_plus_modified[j + length] - phases_plus_modified[j] for j in

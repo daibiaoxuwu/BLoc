@@ -199,7 +199,7 @@ def main():
                 print("=== Warring ! One of the device not supporting AOA functionality ===")
 
         ## Sleep code to see in the screen receives data from devices
-        timeout_sec = 15
+        timeout_sec = 60
         print("Going to sleep for {} sec".format(timeout_sec))
         timeout = time.time() + timeout_sec
         while timeout >= time.time():

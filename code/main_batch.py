@@ -23,13 +23,14 @@ length = 16
 # and write your path of the output folder of rtls_aoa_iq_with_rtls_util_export_into_csv_log.py here
 filepath = r"D:\prog10\Desktop\桌面\210120\aoadata\rtls_agent\examples\rtls_aoa_iq_with_rtls_util_export_into_csv_log"
 filepath = r"D:\prog10\Desktop\桌面\210120\rtls_agent\rtls_agent\examples\rtls_aoa_iq_with_rtls_util_export_into_csv_log"
-filepath = r"D:\prog10\Desktop\BLoc\data\2021_03_26_0to90outdoors_rainy"
+filepath = r"..\data\2021_03_26_0to90outdoors_rainy"
 # put the address of the device we want to analyze (e.g. the address of PASSIVE)
 # this address is used to filter data in the csv file
 # when calculating AOA from PASSIVE, write the PASSIVE's address
 # when calculating AOA from MASTER, write the MASTER's address
 address = "80:6F:B0:EE:AC:E1"
-
+results1 = []
+results2 = []
 for filename in [i for i in os.listdir(filepath) if '.csv' in i]:
 # if __name__ == '__main__':
 
@@ -43,7 +44,7 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i]:
     with open(os.path.join(filepath, filename)) as f:
 
         # open file to write to
-        with open('out.csv', 'w') as g:
+        #with open('out.csv', 'w') as g:
 
             # read csv
             xs = []  # list of I raw data
@@ -84,8 +85,8 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i]:
                 phases_packet = phases_packet[32:]
 
                 # plot
-                plt.plot(phases_packet, 'b.', linewidth=0.5, markersize=3)
-                plt.title('the original phases')
+                #plt.plot(phases_packet, 'b.', linewidth=0.5, markersize=3)
+                #plt.title('the original phases')
                 #plt.show()
 
                 # calculate phases_plus
@@ -127,36 +128,36 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i]:
                 # save the last packet for difference
                 lstResult = phases_packet[-1]
                 phases_plus.append(lstResult + diff)
-
-                plt.plot(phases_plus, 'b.', linewidth=0.5, markersize=0.5)
-                plt.title('the original phases with 360 plus')
-                #plt.show()
-                # calculate the difference between phases
-                # we'll only use this phase_diff later
                 phases_diff = [phases_plus[j + 1] - phases_plus[j] for j in range(0, len(phases_plus) - 1)]
                 #phases_diff = [i if i > -100 else i + 360 for i in phases_diff]
+                '''
+                plt.plot(phases_plus, 'b.', linewidth=0.5, markersize=0.5)
+                plt.title('the original phases with 360 plus')
+                plt.show()
+                # calculate the difference between phases
+                # we'll only use this phase_diff later
 
                 plt.plot(phases_diff, 'b.', linewidth=0.5, markersize=10)
                 plt.plot(np.array(fixmem), [ phases_diff[i] for i in fixmem],  'r.', linewidth=0.5, markersize=10)
                 plt.title('phases_plus diff1 phase[i+1] - phase[i]')
-                #plt.show()
+                plt.show()
                 plt.plot([phases_diff[i] for i in range(len(phases_diff)) if int((i % (length * 3)) / length) == 0], 'b.', linewidth=0.5, markersize=10,label = "antenna0")
                 temp = [phases_diff[i] for i in range(len(phases_diff)) if i % 16 == 0 and int((i % (length * 3)) / length) == 0]
                 plt.plot(np.array(range(0,len(temp)))*16, temp, 'r.', linewidth=0.5, markersize=10)
                 plt.legend()
-                #plt.show()
+                plt.show()
                 plt.plot([phases_diff[i] for i in range(len(phases_diff)) if int((i % (length * 3)) / length) == 1], 'g.', linewidth=0.5, markersize=10,label = "antenna1")
                 temp = [phases_diff[i] for i in range(len(phases_diff)) if i % 16 == 0 and int((i % (length * 3)) / length) == 1]
                 plt.plot(np.array(range(0,len(temp)))*16, temp, 'r.', linewidth=0.5, markersize=10)
                 plt.legend()
-                #plt.show()
+                plt.show()
                 plt.plot([phases_diff[i] for i in range(len(phases_diff)) if int((i % (length * 3)) / length) == 2], 'r.', linewidth=0.5, markersize=10,label = "antenna2")
                 temp = [phases_diff[i] for i in range(len(phases_diff)) if i % 16 == 0 and int((i % (length * 3)) / length) == 2]
                 plt.plot(np.array(range(0,len(temp)))*16, temp, 'b.', linewidth=0.5, markersize=10)
                 plt.title('phases_plus diff1 phase[i+length] - phase[i]')
                 plt.legend()
-                #plt.show()
-
+                plt.show()
+'''
                 phases_diff_len = [phases_plus[j + length] - phases_plus[j] for j in
                                    range(0, len(phases_plus) - length)]
                 phases_diff_lens = [[phases_diff_len[i] for i in range(len(phases_diff_len)) if int((i % (length * 3)) / length) == ant]
@@ -164,14 +165,14 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i]:
                 phases_diff_lens_demo = [[phases_diff_len[i] for i in range(len(phases_diff_len)) if int((i % (length * 3)) / length) == ant and abs(i % length - 8) < 4]
                                     for ant in range(3)]
 
-                plt.plot(phases_diff_lens_demo[0], 'b.', linewidth=0.5, markersize=3,label = "antenna0to1")
-                plt.plot(phases_diff_lens_demo[1], 'g.', linewidth=0.5, markersize=3,label = "antenna1to2")
-                plt.plot(phases_diff_lens_demo[2], 'r.', linewidth=0.5, markersize=3,label = "antenna2to0")
-                plt.title('phases_plus diff16 phase[i+length] - phase[i]')
-                plt.legend()
+                #plt.plot(phases_diff_lens_demo[0], 'b.', linewidth=0.5, markersize=3,label = "antenna0to1")
+                #plt.plot(phases_diff_lens_demo[1], 'g.', linewidth=0.5, markersize=3,label = "antenna1to2")
+                #plt.plot(phases_diff_lens_demo[2], 'r.', linewidth=0.5, markersize=3,label = "antenna2to0")
+                #plt.title('phases_plus diff16 phase[i+length] - phase[i]')
+                #plt.legend()
                 #plt.show()
-                plt.plot(phases_diff_len, 'b.', linewidth=0.5, markersize=3)
-                plt.title('phases_plus diff16 (all antennas) phase[i+length] - phase[i]')
+                #plt.plot(phases_diff_len, 'b.', linewidth=0.5, markersize=3)
+                #plt.title('phases_plus diff16 (all antennas) phase[i+length] - phase[i]')
                 #plt.show()
 
                 # calculate the averages of each antenna for levelling
@@ -208,7 +209,7 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i]:
                     #print("ant_result_diff: ", ant_result_diffs[ant])
                 avg_diff1 = np.average(ant_result_diffs)
                 #print("avgard", avg_diff1 * length)
-                # #plt.show()
+                #plt.show()
 
                 #modify phases
                 s = 0
@@ -216,8 +217,8 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i]:
                 for i in range(len(phases_plus)):
                     phases_plus_modified.append(phases_plus[i] - s)
                     s += ant_result_diffs[int((i % (length * 3)) / length)]
-                plt.plot(phases_plus_modified, 'r.', linewidth=0.5, markersize=3)
-                plt.title('phases - avg_phase_increase_of_this_antenna(around 20)')
+                #plt.plot(phases_plus_modified, 'r.', linewidth=0.5, markersize=3)
+                #plt.title('phases - avg_phase_increase_of_this_antenna(around 20)')
                 #plt.show()
 
                 #validation
@@ -229,11 +230,11 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i]:
                         idx = i * length + j
                         phases_plus_modified_in_each_ant[ant].append(phases_plus_modified[idx] - temp)
 
-                plt.plot(phases_plus_modified_in_each_ant[0], 'r.', linewidth=0.5, markersize=3,label='phases_plus_modified_in_each_ant[0]')
-                plt.plot(phases_plus_modified_in_each_ant[1], 'g.', linewidth=0.5, markersize=3,label='phases_plus_modified_in_each_ant[1]')
-                plt.plot(phases_plus_modified_in_each_ant[2], 'b.', linewidth=0.5, markersize=3,label='phases_plus_modified_in_each_ant[2]')
-                plt.title('validation: the mid 8 points of each antenna should be flattened')
-                plt.legend()
+                #plt.plot(phases_plus_modified_in_each_ant[0], 'r.', linewidth=0.5, markersize=3,label='phases_plus_modified_in_each_ant[0]')
+                #plt.plot(phases_plus_modified_in_each_ant[1], 'g.', linewidth=0.5, markersize=3,label='phases_plus_modified_in_each_ant[1]')
+                #plt.plot(phases_plus_modified_in_each_ant[2], 'b.', linewidth=0.5, markersize=3,label='phases_plus_modified_in_each_ant[2]')
+                #plt.title('validation: the mid 8 points of each antenna should be flattened')
+                #plt.legend()
                 #plt.show()
 
 
@@ -246,7 +247,7 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i]:
                 for ant in range(3):
                     # plot the histogram of phase_diff of antenna in each packet
                     # plt.hist(phase_diff_modified_per_ant[ant], bins=40, density=True)
-                    plt.hist(phase_diff_modified_per_ant[ant], bins=40)
+                    #plt.hist(phase_diff_modified_per_ant[ant], bins=40)
                     # calculate the histogram
                     (histogram, binplace) = np.histogram(phase_diff_modified_per_ant[ant], bins=40)
 
@@ -274,6 +275,9 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i]:
                 diff3 = ((ant_result_diffs16[0]+ant_result_diffs16[1])/2-ant_result_diffs16[2])/3
                 #print('ant diffs[calculated by (updiff-downdiff)/3]:',phasetoangle(diff3))
                 print(str(np.average(angles))+'\t'+str(phasetoangle(diff3)))
+                results1.append(np.average(angles))
+                results2.append(phasetoangle(diff3))
+
                 # #plt.show()
 
                 # plot phase_diff_modified
@@ -296,11 +300,9 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i]:
                     # do the linear_regression. the result line: y = a0 + a1 * j
                     a0, a1 = linear_regression(np.array(range(lenside, length - lenside)),
                                                np.array(phases_plus[i + lenside:i + length - lenside]))
-                    plt.plot(np.array(range(i, i + length)), [a0 + a1 * (x - i) for x in range(i, i + length)],
-                             'r.', linewidth=0.5, markersize=3)  # , label='phase calculated from I/Q output')
-                    plt.plot(np.array(range(i, i + length)), phases_plus[i:i + length], 'b.', linewidth=0.5,
-                             markersize=3)
-                plt.title("phases and lines - antenna feature modified")
+                    #plt.plot(np.array(range(i, i + length)), [a0 + a1 * (x - i) for x in range(i, i + length)], 'r.', linewidth=0.5, markersize=3)  # , label='phase calculated from I/Q output')
+                    #plt.plot(np.array(range(i, i + length)), phases_plus[i:i + length], 'b.', linewidth=0.5, markersize=3)
+                #plt.title("phases and lines - antenna feature modified")
                 #plt.show()
 
                 # draw lines for phases_plus with antenna diff removed
@@ -312,20 +314,28 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i]:
                     # do the linear_regression. the result line: y = a0 + a1 * j
                     a0, a1 = linear_regression(np.array(range(lenside, length - lenside)),
                                                np.array(phases_plus_modified[i + lenside:i + length - lenside]))
-                    plt.plot(np.array(range(i, i + length)), [a0 + a1 * (x - i) for x in range(i, i + length)],
-                             'r.', linewidth=0.5, markersize=3)  # , label='phase calculated from I/Q output')
-                    plt.plot(np.array(range(i, i + length)), phases_plus_modified[i:i + length], 'b.', linewidth=0.5,
-                             markersize=3)
-                plt.title("phases and lines - antenna feature modified")
+                    #plt.plot(np.array(range(i, i + length)), [a0 + a1 * (x - i) for x in range(i, i + length)], 'r.', linewidth=0.5, markersize=3)  # , label='phase calculated from I/Q output')
+                    #plt.plot(np.array(range(i, i + length)), phases_plus_modified[i:i + length], 'b.', linewidth=0.5, markersize=3)
+                #plt.title("phases and lines - antenna feature modified")
                 #plt.show()
 
                 phases_modified_diff_len = [phases_plus_modified[j + length] - phases_plus_modified[j] for j in
                                             range(0, len(phases_plus_modified) - length)]
 
-                plt.plot(phases_modified_diff_len, 'b.', linewidth=0.5, markersize=3, label="modified phase")
-                plt.plot([i - np.average(ant_result_diffs)*length for i in phases_diff_len], 'r.', linewidth=0.5, markersize=3, label="original phase")
-                plt.title('phases_plus_modified diff across length phase[i+length] - phase[i]')
-                plt.legend()
+                #plt.plot(phases_modified_diff_len, 'b.', linewidth=0.5, markersize=3, label="modified phase")
+                #plt.plot([i - np.average(ant_result_diffs)*length for i in phases_diff_len], 'r.', linewidth=0.5, markersize=3, label="original phase")
+                #plt.title('phases_plus_modified diff across length phase[i+length] - phase[i]')
+                #plt.legend()
                 #plt.show()
+    
+    plt.plot(results1, 'b.', linewidth=0.5, markersize=3, label="angle average")
+    plt.plot(results2, 'r.', linewidth=0.5, markersize=3, label="diff / 3")
+    truth = int(filename.split('.')[-2].split('_')[-1])-45
+    plt.plot(np.array([0,len(results1)]),np.array([truth,truth]), 'g', linewidth=0.5, markersize=3, label="truth")
+    plt.title('results: '+filename)
+    plt.savefig(filename[:-4])
+    plt.clf()
+    results1 = []
+    results2 = []
 
 

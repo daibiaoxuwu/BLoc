@@ -1,0 +1,40 @@
+[2021-03-29 17:10:55,721]      root -     INFO - Setting nodes : 
+[2021-03-29 17:10:55,723]      root -     INFO - Message receiver started
+[2021-03-29 17:10:55,724]      root -     INFO - RTLS Manager started
+[2021-03-29 17:10:57,726]      root -     INFO - Done setting node
+[2021-03-29 17:10:57,729]  rtlsnode -     INFO - PASSIVE : 80:6F:B0:31:FB:AF <-- {'type': 'Command', 'command': 'RTLS_CMD_RESET_DEVICE', 'payload': None}
+[2021-03-29 17:10:57,729]  rtlsnode -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 <-- {'type': 'Command', 'command': 'RTLS_CMD_RESET_DEVICE', 'payload': None}
+[2021-03-29 17:10:57,803]      root -  WARNING - ConstError('parsing expected 254 but parsed 0')
+[2021-03-29 17:10:57,807]      root -     INFO - PASSIVE : 80:6F:B0:31:FB:AF --> {'type': 'Event', 'command': 'RTLS_CMD_RESET_DEVICE', 'payload': {'raw_payload': ''}}
+[2021-03-29 17:10:57,819]      root -  WARNING - ConstError('parsing expected 254 but parsed 0')
+[2021-03-29 17:10:57,877]      root -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 --> {'type': 'Event', 'command': 'RTLS_CMD_RESET_DEVICE', 'payload': {'raw_payload': ''}}
+[2021-03-29 17:10:57,958]  rtlsnode -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 <-- {'type': 'Command', 'command': 'RTLS_CMD_SCAN', 'payload': None}
+[2021-03-29 17:10:58,051]      root -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 --> {'type': 'Response', 'command': 'RTLS_CMD_SCAN', 'payload': {'status': 'RTLS_SUCCESS'}}
+[2021-03-29 17:10:58,116]      root -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 --> {'type': 'Event', 'command': 'RTLS_CMD_SCAN', 'payload': {'eventType': 19, 'addrType': 0, 'addr': '80:6F:B0:31:D7:F1', 'rssi': -67, 'dataLen': 14, 'data': '0A:08:52:54:4C:53:53:6C:61:76:65:02:01:06'}}
+[2021-03-29 17:11:00,024]      root -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 --> {'type': 'Event', 'command': 'RTLS_CMD_SCAN_STOP', 'payload': {'status': 'RTLS_SUCCESS'}}
+[2021-03-29 17:11:00,126]  rtlsnode -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 <-- {'type': 'Command', 'command': 'RTLS_CMD_SCAN', 'payload': None}
+[2021-03-29 17:11:00,193]      root -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 --> {'type': 'Response', 'command': 'RTLS_CMD_SCAN', 'payload': {'status': 'RTLS_SUCCESS'}}
+[2021-03-29 17:11:00,196]      root -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 --> {'type': 'Event', 'command': 'RTLS_CMD_SCAN', 'payload': {'eventType': 19, 'addrType': 0, 'addr': '80:6F:B0:31:D7:F1', 'rssi': -67, 'dataLen': 14, 'data': '0A:08:52:54:4C:53:53:6C:61:76:65:02:01:06'}}
+[2021-03-29 17:11:02,187]      root -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 --> {'type': 'Event', 'command': 'RTLS_CMD_SCAN_STOP', 'payload': {'status': 'RTLS_SUCCESS'}}
+[2021-03-29 17:11:02,262]  rtlsnode -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 <-- {'type': 'Command', 'command': 'RTLS_CMD_SCAN', 'payload': None}
+[2021-03-29 17:11:02,360]      root -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 --> {'type': 'Response', 'command': 'RTLS_CMD_SCAN', 'payload': {'status': 'RTLS_SUCCESS'}}
+[2021-03-29 17:11:02,420]      root -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 --> {'type': 'Event', 'command': 'RTLS_CMD_SCAN', 'payload': {'eventType': 19, 'addrType': 0, 'addr': '80:6F:B0:31:D7:F1', 'rssi': -63, 'dataLen': 14, 'data': '0A:08:52:54:4C:53:53:6C:61:76:65:02:01:06'}}
+[2021-03-29 17:11:04,367]      root -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 --> {'type': 'Event', 'command': 'RTLS_CMD_SCAN_STOP', 'payload': {'status': 'RTLS_SUCCESS'}}
+[2021-03-29 17:11:04,449]  rtlsnode -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 <-- {'type': 'Command', 'command': 'RTLS_CMD_CONNECT', 'payload': {'addrType': 0, 'peerAddr': '80:6F:B0:31:D7:F1', 'connInterval': 240}}
+[2021-03-29 17:11:04,537]      root -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 --> {'type': 'Response', 'command': 'RTLS_CMD_CONNECT', 'payload': {'status': 'RTLS_SUCCESS'}}
+[2021-03-29 17:11:04,592]  rtlsnode -     INFO - PASSIVE : 80:6F:B0:31:FB:AF <-- {'type': 'Command', 'command': 'RTLS_CMD_CONN_PARAMS', 'payload': {'connHandle': 0, 'accessAddress': 437170245, 'connInterval': 480, 'hopValue': 5, 'mSCA': 0, 'currChan': 5, 'chanMap': [255, 255, 255, 255, 31], 'crcInit': 5209358}}
+[2021-03-29 17:11:04,597]      root -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 --> {'type': 'Event', 'command': 'RTLS_CMD_CONN_PARAMS', 'payload': {'connHandle': 0, 'accessAddress': 437170245, 'connInterval': 480, 'hopValue': 5, 'mSCA': 0, 'currChan': 5, 'chanMap': [255, 255, 255, 255, 31], 'crcInit': 5209358, 'peerAddr': '80:6F:B0:31:D7:F1'}}
+[2021-03-29 17:11:04,689]      root -     INFO - PASSIVE : 80:6F:B0:31:FB:AF --> {'type': 'Response', 'command': 'RTLS_CMD_CONN_PARAMS', 'payload': {'status': 'RTLS_SUCCESS'}}
+[2021-03-29 17:11:05,316]      root -     INFO - PASSIVE : 80:6F:B0:31:FB:AF --> {'type': 'Event', 'command': 'RTLS_CMD_CONNECT', 'payload': {'connHandle': 0, 'status': 'RTLS_SUCCESS'}}
+[2021-03-29 17:11:06,395]      root -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 --> {'type': 'Event', 'command': 'RTLS_CMD_CONNECT', 'payload': {'connHandle': 0, 'status': 'RTLS_LINK_TERMINATED'}}
+[2021-03-29 17:11:06,456]  rtlsnode -     INFO - PASSIVE : 80:6F:B0:31:FB:AF <-- {'type': 'Command', 'command': 'RTLS_CMD_IDENTIFY', 'payload': None}
+[2021-03-29 17:11:06,458]  rtlsnode -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 <-- {'type': 'Command', 'command': 'RTLS_CMD_IDENTIFY', 'payload': None}
+[2021-03-29 17:11:06,582]      root -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 --> {'type': 'Response', 'command': 'RTLS_CMD_IDENTIFY', 'payload': {'capabilities': {'CM': False, 'AOA_TX': False, 'AOA_RX': True, 'TOF_SLAVE': False, 'TOF_PASSIVE': False, 'TOF_MASTER': False, 'RTLS_SLAVE': False, 'RTLS_MASTER': True, 'RTLS_PASSIVE': False}, 'revNum': 2, 'devId': 'DeviceFamily_ID_CC26X2', 'identifier': '80:6F:B0:EE:AC:E1'}}
+[2021-03-29 17:11:06,585]      root -     INFO - PASSIVE : 80:6F:B0:31:FB:AF --> {'type': 'Response', 'command': 'RTLS_CMD_IDENTIFY', 'payload': {'capabilities': {'CM': True, 'AOA_TX': False, 'AOA_RX': True, 'TOF_SLAVE': False, 'TOF_PASSIVE': False, 'TOF_MASTER': False, 'RTLS_SLAVE': False, 'RTLS_MASTER': False, 'RTLS_PASSIVE': True}, 'revNum': 2, 'devId': 'DeviceFamily_ID_CC26X2', 'identifier': '80:6F:B0:31:FB:AF'}}
+[2021-03-29 17:11:15,999]      root -     INFO - PASSIVE : 80:6F:B0:31:FB:AF --> {'type': 'Event', 'command': 'RTLS_CMD_CONNECT', 'payload': {'connHandle': 0, 'status': 'RTLS_LINK_TERMINATED'}}
+[2021-03-29 17:11:16,292]      root -     INFO - PASSIVE : 80:6F:B0:31:FB:AF --> {'type': 'Event', 'command': 'RTLS_CMD_CONNECT', 'payload': {'connHandle': 255, 'status': 'RTLS_SUCCESS'}}
+[2021-03-29 17:11:36,769]  rtlsnode -     INFO - PASSIVE : 80:6F:B0:31:FB:AF <-- {'type': 'Command', 'command': 'RTLS_CMD_IDENTIFY', 'payload': None}
+[2021-03-29 17:11:36,770]  rtlsnode -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 <-- {'type': 'Command', 'command': 'RTLS_CMD_IDENTIFY', 'payload': None}
+[2021-03-29 17:11:36,861]      root -     INFO - PASSIVE : 80:6F:B0:31:FB:AF --> {'type': 'Response', 'command': 'RTLS_CMD_IDENTIFY', 'payload': {'capabilities': {'CM': True, 'AOA_TX': False, 'AOA_RX': True, 'TOF_SLAVE': False, 'TOF_PASSIVE': False, 'TOF_MASTER': False, 'RTLS_SLAVE': False, 'RTLS_MASTER': False, 'RTLS_PASSIVE': True}, 'revNum': 2, 'devId': 'DeviceFamily_ID_CC26X2', 'identifier': '80:6F:B0:31:FB:AF'}}
+[2021-03-29 17:11:36,862]      root -     INFO - MASTER  : 80:6F:B0:EE:AC:E1 --> {'type': 'Response', 'command': 'RTLS_CMD_IDENTIFY', 'payload': {'capabilities': {'CM': False, 'AOA_TX': False, 'AOA_RX': True, 'TOF_SLAVE': False, 'TOF_PASSIVE': False, 'TOF_MASTER': False, 'RTLS_SLAVE': False, 'RTLS_MASTER': True, 'RTLS_PASSIVE': False}, 'revNum': 2, 'devId': 'DeviceFamily_ID_CC26X2', 'identifier': '80:6F:B0:EE:AC:E1'}}
+[2021-03-29 17:11:36,876]      root -     INFO - AOA Stopped

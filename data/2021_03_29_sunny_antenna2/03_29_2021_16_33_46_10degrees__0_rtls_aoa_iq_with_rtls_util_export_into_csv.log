@@ -1,0 +1,5 @@
+[2021-03-29 16:33:46,611]      root -     INFO - Setting nodes : 
+[2021-03-29 16:33:46,611]      root -     INFO - Message receiver started
+[2021-03-29 16:33:46,611]      root -     INFO - RTLS Manager started
+[2021-03-29 16:33:46,611] serialnode -    ERROR - could not open port 'COM6': FileNotFoundError(2, '系统找不到指定的文件。', None, 2)
+[2021-03-29 16:33:49,121]      root -     INFO - AOA Stopped

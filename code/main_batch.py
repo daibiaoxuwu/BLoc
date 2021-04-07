@@ -37,7 +37,7 @@ filepath = r"..\data\2021_03_29_sunny_antenna2"
 address = "80:6F:B0:EE:AC:E1"
 results1 = []
 results2 = []
-for filename in [i for i in os.listdir(filepath) if '.csv' in i][3:]:
+for filename in [i for i in os.listdir(filepath) if '.csv' in i][17:]:
 # if __name__ == '__main__':
 
     # open the newest csv file in the directory
@@ -163,7 +163,7 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i][3:]:
                 plt.title('phases_plus diff1 phase[i+length] - phase[i]')
                 plt.legend()
                 plt.show()
-'''
+                '''
                 phases_diff_len = [phases_plus[j + length] - phases_plus[j] for j in
                                    range(0, len(phases_plus) - length)]
                 phases_diff_lens = [[phases_diff_len[i] for i in range(len(phases_diff_len)) if int((i % (length * 3)) / length) == ant]
@@ -171,20 +171,15 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i][3:]:
                 phases_diff_lens_demo = [[phases_diff_len[i] for i in range(len(phases_diff_len)) if int((i % (length * 3)) / length) == ant and abs(i % length - 8) < 4]
                                     for ant in range(3)]
 
-                # plt.subplot(1, 2, 1)
                 plt.plot(phases_diff_lens_demo[0], 'b.', linewidth=0.5, markersize=3,label = "antenna0to1")
                 plt.plot(phases_diff_lens_demo[1], 'g.', linewidth=0.5, markersize=3,label = "antenna1to2")
                 plt.plot(phases_diff_lens_demo[2], 'r.', linewidth=0.5, markersize=3,label = "antenna2to0")
-                phases_diff_lens_demo_avg = [np.average(phases_diff_lens_demo[i]) for i in range(3)]
-                plt.plot([0,len(phases_diff_lens_demo[0])],[phases_diff_lens_demo_avg[0],phases_diff_lens_demo_avg[0]], 'b', linewidth=0.5, markersize=3,label = "antenna0to1")
-                plt.plot([0,len(phases_diff_lens_demo[0])],[phases_diff_lens_demo_avg[1],phases_diff_lens_demo_avg[1]], 'g', linewidth=0.5, markersize=3,label = "antenna1to2")
-                plt.plot([0,len(phases_diff_lens_demo[0])],[phases_diff_lens_demo_avg[2],phases_diff_lens_demo_avg[2]], 'r', linewidth=0.5, markersize=3,label = "antenna2to0")
-                angles = [phasetoangle(k) for k in phases_diff_lens_demo_avg]
-                np.sort(angles)
-                if(abs(phases_diff_lens_demo_avg[0]-phases_diff_lens_demo_avg[1])>abs(phases_diff_lens_demo_avg[1]-phases_diff_lens_demo_avg[2])):
-                    temp = phases_diff_lens_demo_avg[0]
-                    phases_diff_lens_demo_avg[0] = phases_diff_lens_demo_avg[2]
-                    phases_diff_lens_demo_avg[2] = temp
+                plt.title('phases_plus diff16 phase[i+length] - phase[i]')
+                plt.legend()
+                plt.show()
+                plt.plot(phases_diff_len, 'b.', linewidth=0.5, markersize=3)
+                plt.title('phases_plus diff16 (all antennas) phase[i+length] - phase[i]')
+                plt.show()
 
                 #print("ant diffs[calculated by diff16-(avg_diff1)*16]", angles, 'avg', np.average(angles))
                 result = ((phases_diff_lens_demo_avg[0]+phases_diff_lens_demo_avg[1])/2-phases_diff_lens_demo_avg[2])/3
@@ -270,9 +265,9 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i][3:]:
                 # #print(phase_diff_modified_per_ant[0])
                 ant_result_diffs16 = [0,0,0]
                 for ant in range(3):
+
                     # plot the histogram of phase_diff of antenna in each packet
-                    # plt.hist(phase_diff_modified_per_ant[ant], bins=40, density=True)
-                    #plt.hist(phase_diff_modified_per_ant[ant], bins=40)
+                    # plt.hist(phase_diff_modified_per_ant[ant], bins=40)
                     # calculate the histogram
                     (histogram, binplace) = np.histogram(phase_diff_modified_per_ant[ant], bins=40)
 
@@ -283,20 +278,36 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i][3:]:
                     # Parameter: how wide we want this average
                     average_range = (np.max(phase_diff_modified_per_ant[ant]) - np.min(phase_diff_modified_per_ant[ant])) / 8
 
-                    #print('highest bin',highest_bin,'now calc avg ranging from ',highest_bin - average_range, 'to', highest_bin + average_range)
+                    print('highest bin',highest_bin,'now calc avg ranging from ',highest_bin - average_range, 'to', highest_bin + average_range)
                     # calculate the average
                     ant_result_diffs16[ant] = np.average(
                         [k for k in phase_diff_modified_per_ant[ant] if abs(k - highest_bin) < average_range])
-                    #print("ant_result_diff16: ", ant_result_diffs16[ant])
-                    #plt.show()
+                    print("ant_result_diff16: ", ant_result_diffs16[ant])
+                    # plt.show()
 
-
-                angles = [phasetoangle(k) for k in ant_result_diffs16]
+                def phasetoangle(phase):
+                    angle = float(phase/90)
+                    angle = min(angle,1)
+                    angle = max(angle,-1)
+                    return math.asin(angle)/math.pi*180
+                # angles = [phasetoangle(k) for k in ant_result_diffs16]
                 #print("ant diffs[calculated by diff16-(avg_diff1)*16]", angles, 'avg', np.average(angles))
-                diff3 = ((ant_result_diffs16[0]+ant_result_diffs16[1])/2-ant_result_diffs16[2])/3
+
+
+
+
+
+                ant_result_diffs16.sort()
+                if(abs(ant_result_diffs16[0] - ant_result_diffs16[1]) > (ant_result_diffs16[1] - ant_result_diffs16[2])):
+                    temp = ant_result_diffs16[0]
+                    ant_result_diffs16[0] = ant_result_diffs16[2]
+                    ant_result_diffs16[2] = temp
+
+                diff3 = -((ant_result_diffs16[0]+ant_result_diffs16[1])/2-ant_result_diffs16[2])/3
+
                 #print('ant diffs[calculated by (updiff-downdiff)/3]:',phasetoangle(diff3))
-                #print(str(np.average(angles))+'\t'+str(phasetoangle(diff3)))
-                results1.append(np.average(angles))
+                print(str(phasetoangle(diff3)))
+                # results1.append(np.average(angles))
                 results2.append(phasetoangle(diff3))
 
                 # #plt.show()
@@ -349,19 +360,18 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i][3:]:
                 #plt.legend()
                 #plt.show()
     
-    plt.plot(results1, 'b.', linewidth=0.5, markersize=3, label="angle average")
+    #plt.plot(results1, 'b.', linewidth=0.5, markersize=3, label="angle average")
     plt.plot(results2, 'r.', linewidth=0.5, markersize=3, label="diff / 3")
-    truth = int(filename.split('.')[-2].split('_')[-1])
-    #plt.plot(np.array([0,len(results1)]),np.array([truth,truth]), 'g', linewidth=0.5, markersize=3, label="truth")
-    plt.plot(np.array([0,len(results1)]),np.array([np.average(results1),np.average(results1)]), 'b', linewidth=0.2, markersize=3, label="avg angleavg")
-    plt.plot(np.array([0,len(results2)]),np.array([np.average(results2),np.average(results2)]), 'r', linewidth=0.2, markersize=3, label="avg dif/3")
-    plt.plot(np.array([0,len(results2)]),np.array([90,90]), 'k', linewidth=0.2, markersize=3, label="90")
-
+    try:
+        truth = int(filename.split('.')[-2].split('_')[-1])-135
+    except:
+        truth = 180
+    # plt.plot(np.array([0,len(results1)]),np.array([np.average(results1),np.average(results1)]), 'b', linewidth=0.5, markersize=3, label="truth")
+    plt.plot(np.array([0,len(results2)]),np.array([np.average(results2),np.average(results2)]), 'r', linewidth=0.5, markersize=3, label="truth")
+    plt.plot(np.array([0,len(results1)]),np.array([truth,truth]), 'g', linewidth=0.5, markersize=3, label="truth")
     plt.title('results: '+filename)
     plt.savefig(filename[:-4])
-    plt.clf()
-    print(truth,np.average(results1),np.average(results2))
-
+    plt.show()
     results1 = []
     results2 = []
 

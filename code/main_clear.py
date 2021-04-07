@@ -45,7 +45,7 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i][17:]:
             phases_packet = phases_all[pacID * package_size: (pacID + 1) * package_size]
             phases_packet = phases_packet[32:]
             phases_plus = []
-            diff -= phases_packet[0] - lstResult - 80
+            diff -= phases_packet[0] - lstResult - 20
             nextdiff = 0
             nextold = 0
             fixmem = []
@@ -54,7 +54,7 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i][17:]:
                 nextdiff = phases_packet[j] + diff - nextold
                 nextold = phases_packet[j] + diff
                 olddiff = diff
-                temp = phases_packet[1 + j] - phases_packet[j] - 80
+                temp = phases_packet[1 + j] - phases_packet[j] - 20
                 t2 = 0
                 if abs(temp) > 180:
                     t2 = - temp / abs(temp) * 360
@@ -92,6 +92,8 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i][17:]:
             '''
             phases_diff_len = [phases_plus[j + length] - phases_plus[j] for j in
                                range(0, len(phases_plus) - length)]
+            plt.plot(phases_diff_len,'b.')
+            plt.show()
             phases_diff_lens = [
                 [phases_diff_len[i] for i in range(len(phases_diff_len)) if int((i % (length * 3)) / length) == ant]
                 for ant in range(3)]

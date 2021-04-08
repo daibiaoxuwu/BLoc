@@ -183,7 +183,6 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i][17:]:
 
                 #print("ant diffs[calculated by diff16-(avg_diff1)*16]", angles, 'avg', np.average(angles))
                 ant16avg = [np.average(phases_diff_lens_demo[i]) for i in range(3)]
-                ant16avg
                 result = ((ant16avg[0] + ant16avg[1]) / 2 - ant16avg[2]) / 3
                 print(result)
 

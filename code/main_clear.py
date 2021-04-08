@@ -91,18 +91,28 @@ for filename in [i for i in os.listdir(filepath) if '.csv' in i][17:]:
             plt.show()
             '''
             phases_diff_len = [phases_plus[j + length] - phases_plus[j] for j in
-                               range(0, len(phases_plus) - length)]
+                               range(0, len(phases_plus) - length)][:-64]
             plt.plot(phases_diff_len,'b.')
-            plt.show()
+            plt.plot([i for i in range(len(phases_diff_len)) if abs(i%16-8)<=4], [phases_diff_len[i] for i in range(len(phases_diff_len)) if abs(i%16-8)<=4],'c.')
+
+
             phases_diff_lens = [
                 [phases_diff_len[i] for i in range(len(phases_diff_len)) if int((i % (length * 3)) / length) == ant]
                 for ant in range(3)]
             phases_diff_lens_demo = [[phases_diff_len[i] for i in range(len(phases_diff_len)) if
                                       int((i % (length * 3)) / length) == ant and abs(i % length - 8) < 4]
                                      for ant in range(3)]
-            plt.plot(phases_diff_lens_demo[0], 'b.', linewidth=0.5, markersize=3, label="antenna0to1")
-            plt.plot(phases_diff_lens_demo[1], 'g.', linewidth=0.5, markersize=3, label="antenna1to2")
-            plt.plot(phases_diff_lens_demo[2], 'r.', linewidth=0.5, markersize=3, label="antenna2to0")
+            plt.plot([0,len(phases_diff_len)],[np.average(phases_diff_lens_demo[0]),np.average(phases_diff_lens_demo[0])],'r',linewidth = 1)
+            plt.plot([0,len(phases_diff_len)],[np.average(phases_diff_lens_demo[1]),np.average(phases_diff_lens_demo[1])],'g',linewidth = 1)
+            plt.plot([0,len(phases_diff_len)],[np.average(phases_diff_lens_demo[2]),np.average(phases_diff_lens_demo[2])],'b',linewidth = 1)
+            plt.plot([0,len(phases_diff_len)],[(np.average(phases_diff_lens_demo[0])+np.average(phases_diff_lens_demo[1]))/2,(np.average(phases_diff_lens_demo[0])+np.average(phases_diff_lens_demo[1]))/2],'k',linewidth = 1)
+            temp = [phases_diff[i] for i in range(len(phases_diff)) if i % 16 == 0 and int((i % (length * 3)) / length) == 0]
+            plt.plot(np.array(range(0,len(temp)))*16, temp, 'r.', linewidth=0.5, markersize=10)
+            plt.title('phase[i+16]-phase[i]')
+            # plt.show()
+            # plt.plot(phases_diff_lens_demo[0], 'b.', linewidth=0.5, markersize=3, label="antenna0to1")
+            # plt.plot(phases_diff_lens_demo[1], 'g.', linewidth=0.5, markersize=3, label="antenna1to2")
+            # plt.plot(phases_diff_lens_demo[2], 'r.', linewidth=0.5, markersize=3, label="antenna2to0")
 
 
 

@@ -29,7 +29,7 @@ def initialize_csv_file():
     logging_file_path = os.path.join(os.path.curdir, os.path.basename(__file__).replace('.py', '_log'))
     if not os.path.isdir(logging_file_path):
         os.makedirs(logging_file_path)
-    filename = os.path.join(logging_file_path, f"{data_time}_rtls_raw_iq_samples.csv")
+    filename = os.path.join(logging_file_path, f"{data_time}_rtls_raw_iq_samples_180.csv")
     outfile = open(filename, 'w', newline='')
 
     csv_fieldnames = ['identifier', 'pkt', 'sample_idx', 'rssi', 'ant_array', 'channel', 'i', 'q']
@@ -181,7 +181,7 @@ def main():
                         ## bit 4,5 - default: 0x10 - ONLY_ANT_1, optional: 0x20 - ONLY_ANT_2
                         "aoa_sampling_enable": 1,
                         "aoa_pattern_len": 3,
-                        "aoa_ant_pattern": [0, 1, 2]
+                        "aoa_ant_pattern": [3, 4, 5]  
                     }
                 }
                 rtlsUtil.aoa_set_params(aoa_params)
@@ -199,7 +199,7 @@ def main():
                 print("=== Warring ! One of the device not supporting AOA functionality ===")
 
         ## Sleep code to see in the screen receives data from devices
-        timeout_sec = 15
+        timeout_sec = 60
         print("Going to sleep for {} sec".format(timeout_sec))
         timeout = time.time() + timeout_sec
         while timeout >= time.time():

@@ -41,3 +41,81 @@
 * 2021_03_12 在室内走廊上收集了两组数据。一组是45°，一组是35°，用一根网线和量角器测量角度，都有准确的 ground truth。距离为380mm。_2021_03_12_45degrees_indoors_文件夹存放了调效后的最后五组数据，_archives_中的_2021_03_12_45degrees_indoors_buggy_文件夹是那之前采集的所有数据，有很多bug了的空文件，供参考。
 
 * 2021_03_16 沙尘暴之后的第二天 在楼外的小花园过道里采了组数据。45°是目测的，距离6米。注意，换了个新的板子（passive标签斜贴在三角板上的那个），所以mac地址不同。每一个数据包都有很大的区别，从30°到45°到55°疯狂波动。
+
+* 2021_03_27 小雨，下午4点雨停了之后去小花园收集数据。0~90°每个angle一组。把新的passive摔坏了，忏悔！改用旧的。空气湿度极高，不知道会不会有影响。
+
+  倒叙读一遍。
+
+  2度 packet0 [i+1]-[i]
+
+  想到 这里每48左右一个大峰应该是噪音吧 可以去掉 不知道为什么会出现 可能是2~0切换时间长了 卡了一下子
+
+  ![image-20210327024840840](C:\Users\lm\AppData\Roaming\Typora\typora-user-images\image-20210327024840840.png)
+
+![image-20210327025636935](C:\Users\lm\AppData\Roaming\Typora\typora-user-images\image-20210327025636935.png)
+
+峰全在ant0上，那大概是2~0卡了。ant2最后一个点收的好好的，切换时候卡了，0的第一个点就gg了。
+
+2和3都非常正常
+
+![image-20210327030057531](C:\Users\lm\AppData\Roaming\Typora\typora-user-images\image-20210327030057531.png)
+
+**奇怪的点是 峰并不在整数点上（红标）**
+
+![image-20210327030114127](C:\Users\lm\AppData\Roaming\Typora\typora-user-images\image-20210327030114127.png)
+
+包成这个样子基本上是废掉了。不过滤掉
+
+![image-20210327030127543](C:\Users\lm\AppData\Roaming\Typora\typora-user-images\image-20210327030127543.png)
+
+不太好修正呐...
+
+![image-20210327033738658](C:\Users\lm\AppData\Roaming\Typora\typora-user-images\image-20210327033738658.png)
+
+![image-20210327033946907](C:\Users\lm\AppData\Roaming\Typora\typora-user-images\image-20210327033946907.png)
+
+无论是这样子把每一个偏离点（红色）变成上一个点，
+
+![image-20210327034242793](C:\Users\lm\AppData\Roaming\Typora\typora-user-images\image-20210327034242793.png)
+
+![image-20210327034406783](C:\Users\lm\AppData\Roaming\Typora\typora-user-images\image-20210327034406783.png)
+
+效果见上2图，
+
+![image-20210327034126969](C:\Users\lm\AppData\Roaming\Typora\typora-user-images\image-20210327034126969.png)
+
+还是这样子变成22，
+
+![image-20210327034146857](C:\Users\lm\AppData\Roaming\Typora\typora-user-images\image-20210327034146857.png)
+
+![image-20210327034434486](C:\Users\lm\AppData\Roaming\Typora\typora-user-images\image-20210327034434486.png)
+
+效果都不好。**对修正值的影响，只会平移上图这个红色带，不能把他抹平。**不太清楚为什么。
+
+![image-20210327035237079](C:\Users\lm\AppData\Roaming\Typora\typora-user-images\image-20210327035237079.png)
+
+第二个packet尾巴坏掉了 截掉尾巴之后算法一个是10°一个是-6°。
+
+![image-20210327035303449](C:\Users\lm\AppData\Roaming\Typora\typora-user-images\image-20210327035303449.png)
+
+第三个 4°和16°
+
+第四个 又开始有离群点了
+
+![image-20210327035353092](C:\Users\lm\AppData\Roaming\Typora\typora-user-images\image-20210327035353092.png)
+
+![image-20210327035404531](C:\Users\lm\AppData\Roaming\Typora\typora-user-images\image-20210327035404531.png)
+
+数据倒是很好看
+
+算出来10°和-29°
+
+下面是所有包的结果（前半部分 后面乱七八糟的了）
+
+![image-20210327035955947](C:\Users\lm\AppData\Roaming\Typora\typora-user-images\image-20210327035955947.png)
+
+蓝色是分别算angle平均起来 似乎好看点儿 但是这groundtruth在2°可能本身就不容易测准吧。
+
+15°truth的
+
+![image-20210327040251355](C:\Users\lm\AppData\Roaming\Typora\typora-user-images\image-20210327040251355.png)
